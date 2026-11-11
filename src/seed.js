@@ -5,7 +5,11 @@ const addDays = (s, n) => { const d = new Date(s + 'T00:00:00Z'); d.setUTCDate(d
 
 export function seed({ reset = false } = {}) {
   if (reset) db.exec('DELETE FROM finance_line_items; DELETE FROM finance_months; DELETE FROM finance_targets; DELETE FROM invite_tokens; DELETE FROM synced_calendar; DELETE FROM sync_state; DELETE FROM sync_log; DELETE FROM channel_listings; DELETE FROM bookings; DELETE FROM rate_rules; DELETE FROM properties;');
-  if (db.prepare('SELECT COUNT(*) c FROM properties').get().c) return;
+  if (db.prepare('SELECT COUNT(*) c FROM properties').get().c) {
+    const existing = db.prepare("SELECT id FROM properties WHERE slug='beach-place'").get();
+    if (existing) seedFurniture(existing.id);
+    return;
+  }
   const ph = (room, q) => ({ room, label: `Placeholder — ${room} (not an actual photo of the home)`, url: `https://images.unsplash.com/${q}?auto=format&fit=crop&w=1200&q=70` });
   const p = db.prepare(`INSERT INTO properties (slug,name,address,neighborhood,property_type,bedrooms,bathrooms,max_guests,description,amenities_json,highlights_json,sleeping_json,house_rules_json,photos_json,cleaning_fee_cents,base_min_nights)
     VALUES (@slug,@name,@address,@neighborhood,@property_type,@bedrooms,@bathrooms,@max_guests,@description,@a,@h,@s,@r,@ph,@cf,2)`).run({
@@ -73,11 +77,60 @@ export const FURNITURE_PURCHASES = [
   ['112-9465838-9164218', 'Plant stands (2)', 5802],
   ['112-2083580-6984206', 'Outdoor supplies', 5707],
   ['112-9570744-8633807', 'Kitchen & dining', 2901],
-  ['112-0958209-8803432', 'Bathroom accessories', 2794],
+  ['112-0958209-8803432', '2026-10-29 FORASTO toilet brush+plunger 2pk', 2794],
   ['112-1129424-2014645', 'Outdoor décor', 2149],
-  ['112-3586923-2100204', 'Outdoor décor', 644],
+  ['112-3586923-2100204', '2026-10-31 Sukh white pebbles', 644],
   ['112-7263358-9524238', 'Hardware', 606],
-  ['112-6697270-9283453', 'Household supplies', 583],
+  ['112-6697270-9283453', '2026-10-31 SetSail extra-long duster', 583],
+  // Amazon orders logged Nov 10, 2026 (order totals include tax). Skipped 3 already-seeded refs above.
+  ['112-0451783-3186636', '2026-11-09 VTRIN 10-tier shoe rack', 2149],
+  ['112-3538274-8056259', '2026-11-09 Merkisa slim laundry basket beige', 2297],
+  ['112-6788258-1255443', '2026-11-08 YISURE white + navy short shower curtains + Seasonlife vinyl record player', 13240],
+  ['112-6673094-7577808', '2026-11-08 FolkArt gold treasure paint', 964],
+  ['112-6145961-8026608', '2026-11-08 GIGIZAZA gold velvet pillow covers 2pk', 1396],
+  ['112-1994805-0520261', '2026-11-08 Dried flower bouquet w/ pampas', 1429],
+  ['112-7086154-6130655', '2026-11-08 Dusty blue dried flower bouquet', 1718],
+  ['113-3366743-3933000', '2026-11-08 Bethom gold towel rack w/ shelf x4 (replacement)', 0],
+  ['112-4267935-4553802', '2026-11-07 Gold cheesecloth table runner', 676],
+  ['112-1675020-8761868', '2026-11-07 Blank recipe book', 1396],
+  ['112-5915266-3357802', '2026-11-07 ZICPERY guest book', 1074],
+  ['112-4126025-7109052', '2026-11-06 Nicpro gold acrylic paint', 963],
+  ['112-9775111-4105014', '2026-11-05 Ruelvth marble shower window curtain', 1504],
+  ['112-0227553-1569811', '2026-11-05 Command picture hanging strips', 1504],
+  ['112-2713457-8078627', '2026-11-03 Uniqcovosa gold plant stand', 2901],
+  ['113-5933675-6905035', '2026-11-03 Bedsure king duvet set black x2', 8598],
+  ['113-0074511-4272223', '2026-11-03 Bedsure king duvet set dusty blue x2', 8124],
+  ['112-6002715-9014619', '2026-11-03 Bedsure king duvet set olive', 3976],
+  ['112-3295799-3021039', '2026-11-03 Bedsure king duvet set olive', 3976],
+  ['112-9121716-6982630', '2026-11-03 Bedsure king duvet set dark grey x4', 17560],
+  ['112-1701659-1045037', '2026-11-03 Bedsure king duvet set light brown x2', 8812],
+  ['112-6494205-2992223', '2026-11-03 Bedsure king duvet set navy x2', 8376],
+  ['112-2105087-7476233', '2026-11-03 Amazon Basics king comforter inserts', 15960],
+  ['112-8678842-3689062', '2026-11-03 JOLLYVOGUE king pillows 2pk', 2578],
+  ['112-8941171-3022624', '2026-11-03 JOLLYVOGUE king pillows 4pk', 5098],
+  ['112-7646858-1021010', '2026-11-02 Golden push pins', 536],
+  ['112-6634492-4222617', '2026-11-02 7-pc knife set beige', 3116],
+  ['112-4376651-6811402', '2026-11-02 Ruelvth short shower curtain burgundy', 2041],
+  ['112-8371027-7801039', '2026-11-02 Bethom gold towel rack w/ shelf x4', 10316],
+  ['112-8000730-6650650', '2026-11-02 Candle light bulbs 6pk', 1289],
+  ['112-8376681-7145816', '2026-11-02 GoBright E12 LED candelabra bulbs 12pk', 1828],
+  ['112-5972399-8788254', '2026-11-02 Apple Barrel white paint', 319],
+  ['112-5188703-0438641', '2026-11-02 AIDEA Swedish dishcloths 20pk', 1074],
+  ['112-8832940-7225819', '2026-11-02 Gold 3-chamber shower dispenser x2', 3222],
+  ['112-1928223-4136230', '2026-11-02 Ginger Lily body wash 128oz', 2364],
+  ['112-3006226-4100243', '2026-11-02 Ginger Lily conditioner 128oz', 2686],
+  ['112-3157644-5709848', '2026-11-02 Ginger Lily shampoo 128oz', 2686],
+  ['112-8009872-3807440', '2026-11-02 Amber glass soap dispenser x2', 2148],
+  ['112-6046352-7394602', '2026-11-02 RUFCRIL sink soap dispenser', 1074],
+  ['112-4930064-1922628', '2026-11-02 Seventh Generation dish soap refill 3pk', 2378],
+  ['112-7060404-6843468', '2026-11-01 Bookends', 1881],
+  ['112-5127819-5452225', '2026-11-01 Metal plate stand easel', 1289],
+  ['112-9329130-2773852', '2026-10-21 Vintage music wall art', 1547],
+  ['112-2549041-3856255', '2026-10-21 Gold 5x7 frames 2pk', 1074],
+  ['112-6232810-2729003', '2026-10-21 MIEVU 8x10 gold frame', 872],
+  ['112-9692162-3605050', '2026-10-21 Mkono wall propagation planters 4pk', 2579],
+  ['112-0196917-3554636', '2026-10-21 Kathfly glass wall vase planters', 6879],
+  ['112-2960519-4869025', '2026-10-21 Turkish kitchen runner 2x6 dark red', 3224],
   // Local in-store purchases (receipts / bank transactions)
   ['HOMEGOODS-0546', 'HomeGoods Walters Crossing, Tampa 2026-10-31 — scatter rugs, linens, snacks, body & bath, seasonal (Mastercard *9485)', 7805, 'local'],
   ['HOMEDEPOT-6327', 'The Home Depot S Dale Mabry, Tampa 2026-10-31 — staging/cleaning supplies (Swiffer, scissors, tape measures, Fabuloso, Dawn, Clorox, microfiber)', 9836, 'local'],
