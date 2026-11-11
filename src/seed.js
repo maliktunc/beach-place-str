@@ -83,6 +83,7 @@ export const FURNITURE_PURCHASES = [
   ['112-7263358-9524238', 'Hardware', 606],
   ['112-6697270-9283453', '2026-10-31 SetSail extra-long duster', 583],
   // Amazon orders logged Nov 10, 2026 (order totals include tax). Skipped 3 already-seeded refs above.
+  ['113-5955654-7496211', '2026-11-11 Giraffe Tools garden hose holder (150 ft)', 1547],
   ['112-0451783-3186636', '2026-11-09 VTRIN 10-tier shoe rack', 2149],
   ['112-3538274-8056259', '2026-11-09 Merkisa slim laundry basket beige', 2297],
   ['112-6788258-1255443', '2026-11-08 YISURE white + navy short shower curtains + Seasonlife vinyl record player', 13240],
